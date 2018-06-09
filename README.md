@@ -1,0 +1,4 @@
+# log4js_express
+express项目中集成log4j日志模块和officegen模块
+
+在express项目中初始化集成log4j日志模块和officegen模块
