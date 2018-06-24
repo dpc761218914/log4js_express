@@ -296,6 +296,7 @@ var Mock = require('mockjs');
     * 随机数进行配置时间等
     * 可以生成测试图片，图片可以设置大小、颜色、文字等
     * 可以返回boolean、object、array等
+
 ```
 //使用代码
 app.get('/mock', function(req,res){
