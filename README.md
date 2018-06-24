@@ -337,3 +337,7 @@ app.get('/mock', function(req,res){
         }
     );
 ```
+
+# lodash模块
+### 一、lodash模块配置
+##### 1.1、lodash模块安装
