@@ -279,3 +279,60 @@ app.get('/doc', function(req,res){
         logger.error('返回数据成功doc,测试日志等级error');
     });
 ```
+
+# mock模块
+### 一、mock模块配置
+##### 1.1、mock模块安装
+```
+//安装mock模块
+npm install mock -save
+```
+##### 1.2、页面引用
+```
+//在需要使用的页面引用
+var Mock = require('mockjs');
+```
+##### 1.3、页面导入 
+    * 随机数进行配置时间等
+    * 可以生成测试图片，图片可以设置大小、颜色、文字等
+    * 可以返回boolean、object、array等
+```
+//使用代码
+app.get('/mock', function(req,res){
+        //声明一个随机生成函数
+        var Random = Mock.Random;
+        res.json(Mock.mock({
+            "fixed":"这是固定好的数字",
+            "string|3": "★★★",
+            "image":Random.image('900x200', '#50B347', '#FFF', 'Mock.js'),  //模拟发送图片，可以控制普片颜色，图片大小，文字
+            "data":Random.date('yyyy-MM-dd'),    //模拟时间  可以发送各种格式时间
+            "text":'@paragraph',                  //模拟发送段落， 可以控制长度
+            "sentence":Mock.mock('@sentence(5)'),   //模拟发送五个词的句子
+            "word":Mock.mock('@word'),              //模拟发送单词
+            "title":Mock.mock('@title(5)'),   //模拟发送标题
+            "cParagraph":Mock.mock('@cparagraph(8)'), //模拟发送中文段落
+            "cSentence": Mock.mock('@csentence()'),           //模拟发送中文句子
+            "cWord":Mock.mock('@cword("零一二三四五六七八九十")'),   //模拟一个中文词语
+            "cTitle": Mock.mock('@ctitle(5)'),     //模拟中文标题
+            "cName": Mock.mock('@cname'),          //模拟用户姓名，可以单独模拟姓、也可以模拟名
+            "cEmail":Mock.mock('@email'),         //模拟邮箱
+            "cAddress":Mock.mock('@county(true)'),   //模拟地址
+            "number":Mock.mock('@increment(100)'),    //模拟比一百大的数组
+            "sectionNumber|1-100": 100,                //模拟1到100的随机数
+            "boolean|1": true,                       //模拟boolean类型数据
+            "objects|2":  {                          //模拟返回两个对象数组
+                "310000": "上海市",
+                "320000": "江苏省",
+                "330000": "浙江省",
+                "340000": "安徽省"
+            },
+            "array|1": [                              //模拟返回数组类型数据，从数组中取出随机数
+                "AMD",
+                "CMD",
+                "UMD"
+            ]
+
+        }));
+        }
+    );
+```
