@@ -3,8 +3,8 @@ express项目中集成log4j日志模块和officegen模块
 
 # log4js模块
 ### 一、log4j模块配置
-#####1.1 安装log4j模块
-#####1.2 在项目中config文件夹中新建log4j json配置文件
+##### 1.1 安装log4j模块
+##### 1.2 在项目中config文件夹中新建log4j json配置文件
 ```
 {
   "appenders": {
@@ -68,7 +68,7 @@ express项目中集成log4j日志模块和officegen模块
 }
 
 ```
-#####1.3 在项目根目录新建logger文件，引入log4j暴露给用户使用
+##### 1.3 在项目根目录新建logger文件，引入log4j暴露给用户使用
 ```
 /**
  * 功能： log4j日志管理
@@ -118,7 +118,7 @@ exports.use = function (app, level) {
 };
 
 ```
-#####1.4 项目中使用log4j
+##### 1.4 项目中使用log4j
 
 ```
 //在需要使用的文件中引入配置
