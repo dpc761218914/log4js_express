@@ -13,6 +13,9 @@ var docx = officegen ( 'docx' );
 var path = require('path');
 
 var Mock = require('mockjs');
+var lodash=require('lodash');
+
+var Promise = require('bluebird');
 
 
 module.exports = function(app) {
@@ -185,8 +188,173 @@ module.exports = function(app) {
             ]
 
         }));
+        })
+
+    app.get('/lodash', function(req,res){
+
+        var foo = [
+            {id: 0, name: "aaa", age: 33},
+            {id: 1, name: "bbb", age: 25}
+        ];
+
+        //去除某一个元素
+        var bar = lodash.reject(foo, ['id', 0]);
+        //bar = [{id: 1, name: "bbb", age: 25}]
+
+        //根据第二个参数的key的数组，筛选第一个参数中的值并返回
+        var foo1 = {id: 0, name: "aaa", age: 33};
+        var bar1 =lodash.pick(foo1, ['name', 'age']);
+        //bar = {name: "aaa", age: 33}
+
+        //返回object中的所有key
+        var foo = {id: 0, name: "aaa", age: 33}
+        var bar = _.keys(foo);
+        //bar = ['id', 'name', 'age']
+
+
+        res.send(bar);
+    })
+
+    //promise使用，让异步执行更加简单
+    app.get('/promise', function(req,res){
+        var test1 = function(cfg){
+            return new Promise(function(resolve, reject){
+                fs.readFile(cfg, "utf-8", function(err, data){
+                    if(err){
+                        reject(err);
+                    } else {
+                        console.log("test1: ".concat(data));
+                        resolve(data.trim());
+                    }
+                });
+            });
+        };
+
+        var test2 = function(cfg){
+            return new Promise(function(resolve, reject){
+                fs.readFile(cfg, "utf-8", function(err, data){
+                    if(err){
+                        reject(err);
+                    } else {
+                        console.log("test2: ".concat(data));
+                        resolve(data.trim());
+                    }
+                });
+            });
+        };
+
+        var test3 = function(cfg){
+            return new Promise(function(resolve, reject){
+                fs.readFile(cfg, "utf-8", function(err, data){
+                    if(err){
+                        reject(err);
+                    } else {
+                        console.log("test3: ".concat(data));
+                        resolve(data.trim());
+                    }
+                });
+            });
+        };
+
+        test1(txt1)
+            .then(test2(txt2))
+            .then(test3(txt3))
+            .catch(function(err){
+                console.log(err.message);
+            });
+
+
+        res.send("jiantou");
+    });
+
+    //将异步promise精简成一个函数，这里试用promiseall方法，异步读取项目根目录下三个文件操作。处理三个异步相互无关的操作
+    app.get('/promise_all', function(req,res){
+        function createPromise(cfg){
+            return new Promise(function(resolve, reject){
+                fs.readFile(cfg, "utf-8", function(err, data){
+                    if(err){
+                        reject(err);
+                    } else {
+                        console.log("test1: ".concat(data));
+                        resolve(data.trim());
+                    }
+                });
+            });
         }
-    );
-}
+
+        Promise.all([createPromise(txt1),createPromise(txt2),createPromise(txt3)]).then(function(data){
+            console.log("执行成功,结果如下：");
+            let [data1,data2,data3]=data;
+            console.log(data1);
+            console.log(data2);
+            console.log(data3);
+        },function(){
+            console.log("至少一个执行失败")
+        });
 
 
+        res.send("jiantou");
+    });
+
+
+    //promise异步处理是有相互影响的操作，前面执行的方法是后面函数 执行的参数
+    app.get('/promise_parm', function(req,res){
+        // 读取数据1
+        function readTxt1(cfg){
+            return new Promise(function(resolve,reject){
+                fs.readFile(cfg, "utf-8", function(err, data){
+                    if(err){
+                        reject(err);
+                    } else {
+                        console.log("test1: ".concat(data));
+                        resolve(data.trim());
+                    }
+                });
+            });
+        }
+
+        //读取数据2
+        function readTxt2(cfg){
+            return new Promise(function(resolve,reject){
+                fs.readFile(cfg, "utf-8", function(err, data){
+                    if(err){
+                        reject(err);
+                    } else {
+                        console.log("test2: ".concat(data));
+                        resolve(data.trim());
+                    }
+                });
+            });
+        }
+
+        //读取数据3
+        function readTxt3(cfg){
+            return new Promise(function(resolve,reject){
+                fs.readFile(cfg, "utf-8", function(err, data){
+                    if(err){
+                        reject(err);
+                    } else {
+                        // console.log("test2: ".concat(data));
+                        resolve(data.trim());
+                    }
+                });
+            });
+        }
+
+
+        //promist 异步处理,第一个promise的结果，是第二个promise处理请求函数的参数
+        readTxt1("txt1.txt")
+            .then(function(data){
+                //console.log(data);
+                return readTxt2(data)
+            })
+            .then(function(data2){
+                return readTxt3(data2)
+            })
+            .then(function(data3){
+                console.log("jieguo:"+data3);
+                res.send("test");
+            })
+    });
+
+};
