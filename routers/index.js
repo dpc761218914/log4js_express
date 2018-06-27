@@ -215,7 +215,11 @@ module.exports = function(app) {
         res.send(bar);
     })
 
-    //promise使用，让异步执行更加简单
+
+    const txt1 = "txt1.txt";
+    const txt2 = "txt2.txt";
+    const txt3 = "txt3.txt";
+    //promise使用，让异步执行更加简单,按照顺序读取文件内容
     app.get('/promise', function(req,res){
         var test1 = function(cfg){
             return new Promise(function(resolve, reject){
@@ -223,7 +227,7 @@ module.exports = function(app) {
                     if(err){
                         reject(err);
                     } else {
-                        console.log("test1: ".concat(data));
+                      //  console.log("test1: ".concat(data));
                         resolve(data.trim());
                     }
                 });
@@ -236,7 +240,7 @@ module.exports = function(app) {
                     if(err){
                         reject(err);
                     } else {
-                        console.log("test2: ".concat(data));
+                      //  console.log("test2: ".concat(data));
                         resolve(data.trim());
                     }
                 });
@@ -249,7 +253,7 @@ module.exports = function(app) {
                     if(err){
                         reject(err);
                     } else {
-                        console.log("test3: ".concat(data));
+                        //console.log("test3: ".concat(data));
                         resolve(data.trim());
                     }
                 });
@@ -257,14 +261,21 @@ module.exports = function(app) {
         };
 
         test1(txt1)
-            .then(test2(txt2))
-            .then(test3(txt3))
+            .then(function(data){
+                console.log("test1"+data);
+                return test2(txt2)
+            })
+            .then(function(data){
+                console.log("test2"+data);
+                return test3(txt3)
+            })
+            .then(function(data){
+                console.log("test3"+data);
+                res.send("success");
+            })
             .catch(function(err){
                 console.log(err.message);
             });
-
-
-        res.send("jiantou");
     });
 
     //将异步promise精简成一个函数，这里试用promiseall方法，异步读取项目根目录下三个文件操作。处理三个异步相互无关的操作
