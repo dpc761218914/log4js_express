@@ -348,7 +348,7 @@ lodash是Node.js工具类模块，具体用法在使用过程中才考API
 # bluebird模块（比原生Promise更加高效）
 ##### 一、bluebird模块安装
 ```
-npm install bluebrid -save
+npm install bluebird -save
 ```
 
 ##### 一、bluebird Promise初体验
