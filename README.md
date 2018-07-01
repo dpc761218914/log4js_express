@@ -508,7 +508,8 @@ npm install bluebird -save
             })
     });
 ```
-# multer模块（文件上传、图片单图上传、多张图片上传）
+# multer模块（文件上传、图片单图上传、多张图片上传），通过此模块，用户可以上传图片到服务器（可指定文件夹，和更改文件名）成功后，将文件名保存到数据库中，
+
 ##### 一、multer、fs、path模块安装
 ```
 npm install multer fs path -save
