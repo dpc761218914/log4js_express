@@ -562,6 +562,11 @@ var profile = new Profile({
   description: req.body.description,
   photo: req.file.filename,
 });
+
+console.log('文件类型：%s', req.file.mimetype);
+console.log('原始文件名：%s',req.file.originalname);
+console.log('文件大小：%s', req.file.size);
+
 console.log(req.file);
 console.log(req.body);
 profile.save(function(err, data) {
