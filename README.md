@@ -599,8 +599,11 @@ profile.save(function(err, data) {
 
 });
   
+```
+
+#####三、前端调用
+```
  //前端表单
- 
 <div class="container">
 <div class="row justify-content-center">
  <div class="col col-md-6">
@@ -623,5 +626,8 @@ profile.save(function(err, data) {
  </div>
 </div>
 </div>
+
+//也可以对input的文件类型进行限制（例如这里限制图片文件）
+<input type="file" accept="image/png,image/jpg,image/jpeg,image/gif"  class="form-control-file" name="photo">
 
 ```
