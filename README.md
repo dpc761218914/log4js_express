@@ -508,3 +508,114 @@ npm install bluebird -save
             })
     });
 ```
+# multer模块（文件上传、图片单图上传、多张图片上传）
+##### 一、multer、fs、path模块安装
+```
+npm install multer fs path -save
+```
+
+#####二、使用配置
+```
+//引入相关依赖
+var path = require('path');
+var multer = require('multer');
+var fs = require('fs');
+//创建文件夹工具方法
+var createFolder = function(folder){
+  try{
+    fs.accessSync(folder);
+  }catch(e){
+    fs.mkdirSync(folder);
+  }
+};
+//自定义新建文件夹路径
+var uploadFolder = 'public/uploads/user';
+createFolder(uploadFolder);
+
+//配置上传路径和上传文件名
+// file upload destination folder
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, uploadFolder);
+  },
+  // file upload extension
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+// file upload variable
+var upload = multer({
+  storage: storage
+});
+
+```
+
+#####三、使用
+```
+//其中req.body是获取用户表单数据
+// 上传单个文件
+app.post('/api_single', upload.single('photo'), function(req, res, next) {
+console.log('文件名=='+req.file.filename);
+var profile = new Profile({
+  title: req.body.title,
+  description: req.body.description,
+  photo: req.file.filename,
+});
+console.log(req.file);
+console.log(req.body);
+profile.save(function(err, data) {
+  if (err) {
+    return next(err);
+  }
+  console.log(data);
+  res.redirect('/');
+});
+});
+
+//上传多个文件
+app.post('/api', upload.array('photo',2), function(req, res, next) {
+console.log('文件名=='+req.files[0].filename);
+var profile = new Profile({
+  title: req.body.title,
+  description: req.body.description,
+  photo: req.files[0].filename,
+});
+console.log(req.file);
+console.log(req.body);
+profile.save(function(err, data) {
+  if (err) {
+    return next(err);
+  }
+  console.log(data);
+  res.redirect('/');
+
+});
+
+});
+  
+ //前端表单
+ 
+<div class="container">
+<div class="row justify-content-center">
+ <div class="col col-md-6">
+   <form method="post" enctype="multipart/form-data" action="/api">
+     <div class="form-group">
+       <label for="title">Title</label>
+       <input type="text" class="form-control" name="title" placeholder="Enter title" required>
+     </div>
+     <div class="form-group">
+       <label for="title">Description</label>
+       <input type="text" class="form-control" name="description" placeholder="Enter description">
+     </div>
+     <div class="form-group">
+       <label for="photo">Photo</label>
+       <input type="file" class="form-control-file" name="photo">
+         <input type="file" class="form-control-file" name="photo">
+     </div>
+     <button type="submit" class="btn btn-outline-info">Submit</button>
+   </form>
+ </div>
+</div>
+</div>
+
+```
