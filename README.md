@@ -631,3 +631,20 @@ profile.save(function(err, data) {
 <input type="file" accept="image/png,image/jpg,image/jpeg,image/gif"  class="form-control-file" name="photo">
 
 ```
+
+#权限控制（用户的权限数组和该条路由的权限数组相比较，如果存在交集，就有权限，不存在交集就没有权限）
+
+##### 权限控制，比较数组
+```
+ var arr1=[1,2,3];
+    var arr2=[4,5];
+    var arr3 = arr2.filter(function(v){
+        return arr1.indexOf(v)!==-1 // 利用filter方法来遍历是否有相同的元素
+    })
+    if(arr3.length==0){
+        //没有权限
+        console.log("无权限");
+    }else{
+        console.log("存在权限");
+    }
+```
