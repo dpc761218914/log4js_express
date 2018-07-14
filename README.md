@@ -285,7 +285,7 @@ app.get('/doc', function(req,res){
 ##### 1.1、mock模块安装
 ```
 //安装mock模块
-npm install mock -save
+npm install mockjs -save
 ```
 ##### 1.2、页面引用
 ```
